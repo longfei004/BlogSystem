@@ -7,5 +7,9 @@ namespace BlogSystem.Services
     public interface IBlogService
     {
         Task<List<Blog>> GetBlogsAsync();
+
+        Task<Blog> GetBlogAsync(long id);
+
+        Task<Blog> CreateBlogAsync(Blog blog);
     }
 }

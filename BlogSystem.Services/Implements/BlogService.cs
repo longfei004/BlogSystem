@@ -19,5 +19,18 @@ namespace BlogSystem.Services
         {
             return await _context.Blogs.ToListAsync();
         }
+
+        public async Task<Blog> GetBlogAsync(long id)
+        {
+            return await _context.Blogs.FindAsync(id);
+        }
+
+        public async Task<Blog> CreateBlogAsync(Blog blog)
+        {
+            _context.Blogs.Add(blog);
+            await _context.SaveChangesAsync();
+
+            return blog;
+        }
     }
 }
