@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BlogSystem.Services\BlogSystem.Services.csproj" />
+    <ProjectReference Include="..\BlogSystem.Business\BlogSystem.Business.csproj" />
     <ProjectReference Include="..\BlogSystem.Models\BlogSystem.Models.csproj" />
   </ItemGroup>
 

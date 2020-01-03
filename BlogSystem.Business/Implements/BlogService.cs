@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using BlogSystem.DataAccess;
 using BlogSystem.Models;
 
-namespace BlogSystem.Services
+namespace BlogSystem.Business
 {
     public class BlogService : IBlogService
     {

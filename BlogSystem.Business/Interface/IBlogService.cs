@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using BlogSystem.Models;
 
-namespace BlogSystem.Services
+namespace BlogSystem.Business
 {
     public interface IBlogService
     {
