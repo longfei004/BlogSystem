@@ -32,10 +32,11 @@ namespace BlogSystem.Business
 
         public async Task<Blog> CreateBlogAsync(Blog blog)
         {
-            _context.Blogs.Add(blog.ToBlogEntity());
+            BlogEntity _blog = blog.ToBlogEntity();
+            _context.Blogs.Add(_blog);
             await _context.SaveChangesAsync();
 
-            return blog;
+            return _blog.ToBlog();
         }
     }
 }
