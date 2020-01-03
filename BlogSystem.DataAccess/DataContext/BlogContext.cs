@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using BlogSystem.Models;
 
 namespace BlogSystem.DataAccess
 {
@@ -9,6 +8,6 @@ namespace BlogSystem.DataAccess
         {
         }
 
-        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<BlogEntity> Blogs { get; set; }
     }
 }

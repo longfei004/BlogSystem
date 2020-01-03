@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlogSystem.DataAccess;
-using BlogSystem.Models;
 
 namespace BlogSystem.Business
 {
@@ -17,17 +16,23 @@ namespace BlogSystem.Business
 
         public async Task<List<Blog>> GetBlogsAsync()
         {
-            return await _context.Blogs.ToListAsync();
+            List<BlogEntity> _blogs = await _context.Blogs.ToListAsync();
+            List<Blog> blogs = new List<Blog>();
+
+            _blogs.ForEach(_blog => blogs.Add(_blog.ToBlog()));
+
+            return blogs;
         }
 
         public async Task<Blog> GetBlogAsync(long id)
         {
-            return await _context.Blogs.FindAsync(id);
+            BlogEntity _blog = await _context.Blogs.FindAsync(id);
+            return _blog.ToBlog();
         }
 
         public async Task<Blog> CreateBlogAsync(Blog blog)
         {
-            _context.Blogs.Add(blog);
+            _context.Blogs.Add(blog.ToBlogEntity());
             await _context.SaveChangesAsync();
 
             return blog;

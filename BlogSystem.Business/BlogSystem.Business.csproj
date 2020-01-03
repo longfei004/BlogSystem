@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlogSystem.DataAccess\BlogSystem.DataAccess.csproj" />
-    <ProjectReference Include="..\BlogSystem.Models\BlogSystem.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

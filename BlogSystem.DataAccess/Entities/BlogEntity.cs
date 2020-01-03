@@ -1,7 +1,7 @@
 
-namespace BlogSystem.Models
+namespace BlogSystem.DataAccess
 {
-    public class Blog
+    public class BlogEntity
     {
         public long Id { get; set; }
         public string Title { get; set; }
