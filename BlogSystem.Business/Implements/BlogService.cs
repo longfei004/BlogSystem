@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using BlogSystem.DataAccess;
 
 namespace BlogSystem.Business
@@ -33,12 +34,37 @@ namespace BlogSystem.Business
 
         public async Task<Blog> CreateBlogAsync(Blog blog)
         {
+            blog.Id = 0;  // To prevent the blog id be assigned by over post.
             BlogEntity _blog = blog.ToBlogEntity();
 
             _context.Blogs.Add(_blog);
             await _context.SaveChangesAsync();
 
             return _blog.ToBlog();
+        }
+
+        public async Task ModifyBlogAsync(Blog blog)
+        {
+            BlogEntity _blog = blog.ToBlogEntity();
+
+            _context.Entry(_blog).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BlogExists(blog.Id))
+                    throw new NoSuchBlogException();
+                else
+                    throw;
+            }
+        }
+
+        private bool BlogExists(long id)
+        {
+            return _context.Blogs.Any(e => e.Id == id);
         }
     }
 }

@@ -10,5 +10,7 @@ namespace BlogSystem.Business
         Task<Blog> GetBlogAsync(long id);
 
         Task<Blog> CreateBlogAsync(Blog blog);
+
+        Task ModifyBlogAsync(Blog blog);
     }
 }

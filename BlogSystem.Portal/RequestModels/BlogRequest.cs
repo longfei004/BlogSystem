@@ -5,6 +5,8 @@ namespace BlogSystem.Portal
 {
     public class BlogRequest
     {
+        public long Id { get; set; }
+
         [Required]
         public string Title { get; set; }
 
@@ -17,6 +19,7 @@ namespace BlogSystem.Portal
 
             return new Blog
             {
+                Id = this.Id,
                 Title = this.Title,
                 Content = this.Content
             };
