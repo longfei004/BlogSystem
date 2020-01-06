@@ -11,5 +11,18 @@ namespace BlogSystem.Business
         public string Title { get; set; }
 
         public string Content { get; set; }
+
+        public BlogEntity ToBlogEntity()
+        {
+            if(this == null)
+                return null;
+
+            return new BlogEntity
+            {
+                Id = this.Id,
+                Title = this.Title,
+                Content = this.Content
+            };
+        }
     }
 }

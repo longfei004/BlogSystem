@@ -31,7 +31,7 @@ namespace BlogSystem.Business
             return _blog.ToBlog();
         }
 
-        public async Task<Blog> CreateBlogAsync(BlogRequest blog)
+        public async Task<Blog> CreateBlogAsync(Blog blog)
         {
             BlogEntity _blog = blog.ToBlogEntity();
 

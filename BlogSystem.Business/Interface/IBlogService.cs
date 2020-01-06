@@ -9,6 +9,6 @@ namespace BlogSystem.Business
 
         Task<Blog> GetBlogAsync(long id);
 
-        Task<Blog> CreateBlogAsync(BlogRequest blog);
+        Task<Blog> CreateBlogAsync(Blog blog);
     }
 }

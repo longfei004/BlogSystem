@@ -38,7 +38,7 @@ namespace BlogSystem.Portal
         [HttpPost]
         public async Task<ActionResult<Blog>> PostBlog(BlogRequest blog)
         {
-            var savedBlog = await _blogService.CreateBlogAsync(blog);
+            var savedBlog = await _blogService.CreateBlogAsync(blog.ToBlog());
 
             return CreatedAtAction(nameof(GetBlog), new { id = savedBlog.Id }, savedBlog);
         }
