@@ -20,30 +20,28 @@ namespace BlogSystem.Portal
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BlogResponse>>> GetBlogs()
         {
-            var _blogs = await _blogService.GetBlogsAsync();
-            List<BlogResponse> blogs = new List<BlogResponse>();
+            List<Blog> blogs = await _blogService.GetBlogsAsync();
+            List<BlogResponse> blogResponses = new List<BlogResponse>();
 
-            _blogs.ForEach(blog => blogs.Add(blog.ToBlogResponse()));
+            blogs.ForEach(blog => blogResponses.Add(blog.ToBlogResponse()));
 
-            return blogs;
+            return blogResponses;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<BlogResponse>> GetBlog(long id)
         {
-            var blog = await _blogService.GetBlogAsync(id);
-
-            BlogResponse blogResponse = blog.ToBlogResponse();
-            if (blogResponse == null)
+            Blog blog = await _blogService.GetBlogAsync(id);
+            if (blog == null)
                 return NotFound();
 
-            return blogResponse;
+            return blog.ToBlogResponse();
         }
 
         [HttpPost]
         public async Task<ActionResult<Blog>> PostBlog(BlogRequest blogRequest)
         {
-            var savedBlog = await _blogService.CreateBlogAsync(blogRequest.ToBlog());
+            Blog savedBlog = await _blogService.CreateBlogAsync(blogRequest.ToBlog());
 
             return CreatedAtAction(nameof(GetBlog), new { id = savedBlog.Id }, savedBlog);
         }
@@ -70,19 +68,14 @@ namespace BlogSystem.Portal
             return NoContent();
         }
 
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult<Blog>> DeleteBlog(long id)
-        // {
-        //     var blog = await _context.Blogs.FindAsync(id);
-        //     if (blog == null)
-        //     {
-        //         return NotFound();
-        //     }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<BlogResponse>> DeleteBlog(long id)
+        {
+            Blog blog = await _blogService.DeleteBlog(id);
+            if (blog == null)
+                return NotFound();
 
-        //     _context.Blogs.Remove(blog);
-        //     await _context.SaveChangesAsync();
-
-        //     return blog;
-        // }
+            return blog.ToBlogResponse();
+        }
     }
 }

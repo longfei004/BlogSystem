@@ -62,6 +62,18 @@ namespace BlogSystem.Business
             }
         }
 
+        public async Task<Blog> DeleteBlog(long id)
+        {
+            var _blog = await _context.Blogs.FindAsync(id);
+            if (_blog == null)
+                return null;
+
+            _context.Blogs.Remove(_blog);
+            await _context.SaveChangesAsync();
+
+            return _blog.ToBlog();
+        }
+
         private bool BlogExists(long id)
         {
             return _context.Blogs.Any(e => e.Id == id);
