@@ -34,7 +34,9 @@ namespace BlogSystem.Business
 
         public async Task<Blog> CreateBlogAsync(Blog blog)
         {
-            blog.Id = 0;  // To prevent the blog id be assigned by over post.
+            // To prevent the blog id be assigned by over post.
+            blog.Id = 0;
+
             BlogEntity _blog = blog.ToBlogEntity();
 
             _context.Blogs.Add(_blog);
