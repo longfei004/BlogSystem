@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BlogSystem.Business;
 
-namespace BlogSystemApi.Controllers
+namespace BlogSystem.Portal
 {
     [Route("[controller]")]
     [ApiController]
@@ -35,11 +35,10 @@ namespace BlogSystemApi.Controllers
             return blog;
         }
 
-        //todo: The blog id can't be assigned by this method, so id need to be vaildated.
         [HttpPost]
-        public async Task<ActionResult<Blog>> PostBlog(Blog blog)
+        public async Task<ActionResult<Blog>> PostBlog(BlogRequest blog)
         {
-            var savedBlog = await _blogService.CreateBlogAsync(blog);
+            var savedBlog = await _blogService.CreateBlogAsync(blog.ToBlog());
 
             return CreatedAtAction(nameof(GetBlog), new { id = savedBlog.Id }, savedBlog);
         }
