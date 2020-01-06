@@ -27,12 +27,14 @@ namespace BlogSystem.Business
         public async Task<Blog> GetBlogAsync(long id)
         {
             BlogEntity _blog = await _context.Blogs.FindAsync(id);
+
             return _blog.ToBlog();
         }
 
-        public async Task<Blog> CreateBlogAsync(Blog blog)
+        public async Task<Blog> CreateBlogAsync(BlogRequest blog)
         {
             BlogEntity _blog = blog.ToBlogEntity();
+
             _context.Blogs.Add(_blog);
             await _context.SaveChangesAsync();
 
