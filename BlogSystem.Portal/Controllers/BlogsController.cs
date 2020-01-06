@@ -17,22 +17,26 @@ namespace BlogSystem.Portal
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Blog>>> GetBlogs()
+        public async Task<ActionResult<IEnumerable<BlogResponse>>> GetBlogs()
         {
-            return await _blogService.GetBlogsAsync();
+            var _blogs = await _blogService.GetBlogsAsync();
+            List<BlogResponse> blogs = new List<BlogResponse>();
+
+            _blogs.ForEach(blog => blogs.Add(blog.ToBlogResponse()));
+
+            return blogs;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Blog>> GetBlog(long id)
+        public async Task<ActionResult<BlogResponse>> GetBlog(long id)
         {
             var blog = await _blogService.GetBlogAsync(id);
 
-            if (blog == null)
-            {
+            BlogResponse blogResponse = blog.ToBlogResponse();
+            if (blogResponse == null)
                 return NotFound();
-            }
 
-            return blog;
+            return blogResponse;
         }
 
         [HttpPost]
