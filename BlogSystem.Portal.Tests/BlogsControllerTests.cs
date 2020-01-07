@@ -45,6 +45,19 @@ namespace BlogSystem.Portal.Tests
             Assert.Equal(1, blog.Id);
         }
 
+        [Fact]
+        public async Task GetBlog_Should_Return_NotFound_When_Blog_Is_Not_Exist()
+        {
+            var mockService = new Mock<IBlogService>();
+            mockService.Setup(service => service.GetBlogAsync(1))
+                .ReturnsAsync(() => null);
+            var controller = new BlogsController(mockService.Object);
+
+            var result = await controller.GetBlog(1);
+
+            Assert.IsAssignableFrom<NotFoundResult>(result.Result);
+        }
+
         private List<Blog> GetTestBlogs()
         {
             var blogList = new List<Blog>();
