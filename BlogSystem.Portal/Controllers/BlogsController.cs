@@ -60,10 +60,6 @@ namespace BlogSystem.Portal
             {
                 return NotFound();
             }
-            catch (ApplicationException)
-            {
-                throw;
-            }
 
             return NoContent();
         }

@@ -91,6 +91,35 @@ namespace BlogSystem.Portal.Tests
             mockService.Verify(x => x.ModifyBlogAsync(It.IsAny<Blog>()), Times.Once());
         }
 
+        [Fact]
+        public async Task PutBlog_Should_Return_Bad_Request_When_Id_Is_Not_Consistent ()
+        {
+            var mockService = new Mock<IBlogService> ();
+            var controller = new BlogsController (mockService.Object);
+
+            var result = await controller.PutBlog(1, new BlogRequest());
+
+            var action = Assert.IsAssignableFrom<BadRequestResult> (result);
+        }
+
+        [Fact]
+        public async Task PutBlog_Should_Return_Not_Found_When_Assigned_Blog_Is_Not_Exist ()
+        {
+            var mockService = new Mock<IBlogService> ();
+            mockService.Setup(service => service.ModifyBlogAsync(It.IsAny<Blog>()))
+                .ThrowsAsync(new NoSuchBlogException());
+            var controller = new BlogsController (mockService.Object);
+
+            var result = await controller.PutBlog(1, new BlogRequest
+            {
+                Id = 1,
+                Title = "foo",
+                Content = "bar"
+            });
+
+            var action = Assert.IsAssignableFrom<NotFoundResult> (result);
+        }
+
         private List<Blog> GetTestBlogs ()
         {
             var blogList = new List<Blog> ();
