@@ -71,7 +71,6 @@ namespace BlogSystem.Portal.Tests
             var result = await controller.PostBlog(new BlogRequest());
 
             var action = Assert.IsAssignableFrom<CreatedAtActionResult> (result.Result);
-            Assert.Equal(201, action.StatusCode);
         }
 
         [Fact]
@@ -118,6 +117,33 @@ namespace BlogSystem.Portal.Tests
             });
 
             var action = Assert.IsAssignableFrom<NotFoundResult> (result);
+        }
+
+        [Fact]
+        public async Task DeleteBlog_Should_Return_Ok ()
+        {
+            var mockService = new Mock<IBlogService> ();
+            mockService.Setup(service => service.DeleteBlogAsync(1))
+                .ReturnsAsync(blogForTest);
+            var controller = new BlogsController (mockService.Object);
+
+            var result = await controller.DeleteBlog(1);
+
+            var blogResult = Assert.IsAssignableFrom<ActionResult<BlogResponse>> (result);
+            Assert.Equal(1, blogResult.Value.Id);
+        }
+
+        [Fact]
+        public async Task DeleteBlog_Should_Return_Not_Found_When_Assigned_Blog_Is_Not_Exist ()
+        {
+            var mockService = new Mock<IBlogService> ();
+            mockService.Setup(service => service.DeleteBlogAsync(1))
+                .ReturnsAsync(() => null);
+            var controller = new BlogsController (mockService.Object);
+
+            var result = await controller.DeleteBlog(1);
+
+            Assert.IsAssignableFrom<NotFoundResult> (result.Result);
         }
 
         private List<Blog> GetTestBlogs ()

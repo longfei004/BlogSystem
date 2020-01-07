@@ -64,7 +64,7 @@ namespace BlogSystem.Business
             }
         }
 
-        public async Task<Blog> DeleteBlog(long id)
+        public async Task<Blog> DeleteBlogAsync(long id)
         {
             var _blog = await _context.Blogs.FindAsync(id);
             if (_blog == null)

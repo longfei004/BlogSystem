@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -67,7 +66,7 @@ namespace BlogSystem.Portal
         [HttpDelete("{id}")]
         public async Task<ActionResult<BlogResponse>> DeleteBlog(long id)
         {
-            Blog blog = await _blogService.DeleteBlog(id);
+            Blog blog = await _blogService.DeleteBlogAsync(id);
             if (blog == null)
                 return NotFound();
 

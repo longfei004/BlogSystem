@@ -13,6 +13,6 @@ namespace BlogSystem.Business
 
         Task ModifyBlogAsync(Blog blog);
 
-        Task<Blog> DeleteBlog(long id);
+        Task<Blog> DeleteBlogAsync(long id);
     }
 }
