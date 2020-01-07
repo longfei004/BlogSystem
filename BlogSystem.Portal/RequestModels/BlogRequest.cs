@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using BlogSystem.Business;
+using BlogSystem.Business.Domain;
 
-namespace BlogSystem.Portal
+namespace BlogSystem.Portal.RequestModles
 {
     public class BlogRequest
     {

@@ -1,6 +1,7 @@
-using BlogSystem.DataAccess;
+using BlogSystem.DataAccess.Entities;
+using BlogSystem.Business.Domain;
 
-namespace BlogSystem.Business
+namespace BlogSystem.Business.Extensions
 {
     public static class BlogEntityExtension
     {

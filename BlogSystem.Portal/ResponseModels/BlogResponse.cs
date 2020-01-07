@@ -1,4 +1,4 @@
-namespace BlogSystem.Portal
+namespace BlogSystem.Portal.ResponseModels
 {
     public class BlogResponse
     {

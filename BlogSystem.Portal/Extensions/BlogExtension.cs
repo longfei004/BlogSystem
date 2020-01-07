@@ -1,6 +1,7 @@
-using BlogSystem.Business;
+using BlogSystem.Business.Domain;
+using BlogSystem.Portal.ResponseModels;
 
-namespace BlogSystem.Portal
+namespace BlogSystem.Portal.Extensions
 {
     public static class BlogExtension
     {

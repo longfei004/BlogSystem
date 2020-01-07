@@ -1,12 +1,18 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BlogSystem.Business;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using BlogSystem.Business.Interface;
+using BlogSystem.Business.Domain;
+using BlogSystem.Portal.Controllers;
+using BlogSystem.Portal.ResponseModels;
+using BlogSystem.Portal.RequestModles;
+using BlogSystem.Business.Exceptions;
 
-namespace BlogSystem.Portal.Tests
+
+namespace BlogSystem.Portal.Tests.Controllers
 {
     public class BlogsControllerTests
     {

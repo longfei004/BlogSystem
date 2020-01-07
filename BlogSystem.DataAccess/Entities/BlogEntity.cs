@@ -1,5 +1,5 @@
 
-namespace BlogSystem.DataAccess
+namespace BlogSystem.DataAccess.Entities
 {
     public class BlogEntity
     {

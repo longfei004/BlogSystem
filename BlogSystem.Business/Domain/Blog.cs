@@ -1,7 +1,7 @@
-using BlogSystem.DataAccess;
+using BlogSystem.DataAccess.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlogSystem.Business
+namespace BlogSystem.Business.Domain
 {
     public class Blog
     {

@@ -2,9 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using BlogSystem.DataAccess;
+using BlogSystem.DataAccess.Entities;
+using BlogSystem.DataAccess.DataContext;
+using BlogSystem.Business.Domain;
+using BlogSystem.Business.Extensions;
+using BlogSystem.Business.Exceptions;
+using BlogSystem.Business.Interface;
 
-namespace BlogSystem.Business
+namespace BlogSystem.Business.Implements
 {
     public class BlogService : IBlogService
     {

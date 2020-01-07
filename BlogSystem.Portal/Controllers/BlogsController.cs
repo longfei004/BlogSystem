@@ -1,9 +1,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using BlogSystem.Business;
+using BlogSystem.Business.Interface;
+using BlogSystem.Business.Domain;
+using BlogSystem.Business.Exceptions;
+using BlogSystem.Portal.ResponseModels;
+using BlogSystem.Portal.RequestModles;
+using BlogSystem.Portal.Extensions;
 
-namespace BlogSystem.Portal
+namespace BlogSystem.Portal.Controllers
 {
     [Route("[controller]")]
     [ApiController]

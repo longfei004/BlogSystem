@@ -1,13 +1,12 @@
-using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using BlogSystem.DataAccess;
-using BlogSystem.Business;
+using BlogSystem.DataAccess.DataContext;
+using BlogSystem.Business.Interface;
+using BlogSystem.Business.Implements;
 
 
 namespace BlogSystem.Portal

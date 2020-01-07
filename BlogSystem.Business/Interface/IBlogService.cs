@@ -1,7 +1,8 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using BlogSystem.Business.Domain;
 
-namespace BlogSystem.Business
+namespace BlogSystem.Business.Interface
 {
     public interface IBlogService
     {

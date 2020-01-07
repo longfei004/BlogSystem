@@ -1,6 +1,6 @@
 using System;
 
-namespace BlogSystem.Business
+namespace BlogSystem.Business.Exceptions
 {
     public class NoSuchBlogException : ApplicationException
     {
