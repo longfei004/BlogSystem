@@ -71,6 +71,7 @@ namespace BlogSystem.Business.Implements
             }
         }
 
+        // * It maybe only need to test the sad path.
         public async Task<Blog> DeleteBlogAsync(long id)
         {
             var _blog = await _context.Blogs.FindAsync(id);

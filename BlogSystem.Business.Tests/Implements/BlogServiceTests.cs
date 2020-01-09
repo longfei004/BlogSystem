@@ -72,12 +72,23 @@ namespace BlogSystem.Business.Tests.Implements
         }
 
         [Fact]
-        public async Task ModifyBlogAsync_Should_Throw_NoSuchBlogException()
+        public async Task ModifyBlogAsync_Should_Throw_NoSuchBlogException_When_Assigned_Blog_Is_Not_Exist()
         {
             using (var context = new BlogContext(options))
             {
                 var service = new BlogService(context);
                 await Assert.ThrowsAsync<NoSuchBlogException>(() => service.ModifyBlogAsync(new Blog()));
+            }
+        }
+
+        [Fact]
+        public async Task DeleteBlogAsync_Should_Return_Null_When_Assigned_Blog_Is_Not_Exist()
+        {
+            using (var context = new BlogContext(options))
+            {
+                var service = new BlogService(context);
+                var blog = await service.DeleteBlogAsync(1);
+                Assert.Null(blog);
             }
         }
     }
