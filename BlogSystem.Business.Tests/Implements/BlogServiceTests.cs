@@ -11,13 +11,17 @@ namespace BlogSystem.Business.Tests.Implements
 {
     public class BlogServiceTests
     {
-        [Fact]
-        public async Task GetBlogsAsync_Should_Return_BlogList()
+        private DbContextOptions<BlogContext> options;
+
+        public BlogServiceTests()
         {
-            var options = new DbContextOptionsBuilder<BlogContext>()
+            this.options = new DbContextOptionsBuilder<BlogContext>()
                 .UseInMemoryDatabase(databaseName: "TestBlogsDb")
                 .Options;
+        }
 
+        private void InsertSeedDatas()
+        {
             using (var context = new BlogContext(options))
             {
                 context.Blogs.Add(new BlogEntity { Id = 1, Title = "aaa" });
@@ -25,6 +29,22 @@ namespace BlogSystem.Business.Tests.Implements
                 context.Blogs.Add(new BlogEntity { Id = 3, Title = "ccc" });
                 context.SaveChanges();
             }
+        }
+
+        private void ClearAllDataItems()
+        {
+            using (var context = new BlogContext(options))
+            {
+                foreach(var blog in context.Blogs)
+                    context.Blogs.Remove(blog);
+                context.SaveChanges();
+            }
+        }
+
+        [Fact]
+        public async Task GetBlogsAsync_Should_Return_BlogList()
+        {
+            this.InsertSeedDatas();
 
             using (var context = new BlogContext(options))
             {
@@ -33,29 +53,13 @@ namespace BlogSystem.Business.Tests.Implements
                 Assert.Equal(3, result.Count);
             }
 
-            // * clear all data items in database for other tests
-            using (var context = new BlogContext(options))
-            {
-                foreach(var blog in context.Blogs)
-                    context.Blogs.Remove(blog);
-                context.SaveChanges();
-            }
+            this.ClearAllDataItems();
         }
 
         [Fact]
         public async Task GetBlogAsync_Should_Return_Assigned_Blog()
         {
-            var options = new DbContextOptionsBuilder<BlogContext>()
-                .UseInMemoryDatabase(databaseName: "TestBlogsDb")
-                .Options;
-
-            using (var context = new BlogContext(options))
-            {
-                context.Blogs.Add(new BlogEntity { Id = 1, Title = "aaa" });
-                context.Blogs.Add(new BlogEntity { Id = 2, Title = "bbb" });
-                context.Blogs.Add(new BlogEntity { Id = 3, Title = "ccc" });
-                context.SaveChanges();
-            }
+            this.InsertSeedDatas();
 
             using (var context = new BlogContext(options))
             {
@@ -64,22 +68,12 @@ namespace BlogSystem.Business.Tests.Implements
                 Assert.Equal("bbb", blog.Title);
             }
 
-            // * clear all data items in database for other tests
-            using (var context = new BlogContext(options))
-            {
-                foreach(var blog in context.Blogs)
-                    context.Blogs.Remove(blog);
-                context.SaveChanges();
-            }
+            this.ClearAllDataItems();
         }
 
         [Fact]
         public async Task ModifyBlogAsync_Should_Throw_NoSuchBlogException()
         {
-            var options = new DbContextOptionsBuilder<BlogContext>()
-                .UseInMemoryDatabase(databaseName: "TestBlogsDb")
-                .Options;
-
             using (var context = new BlogContext(options))
             {
                 var service = new BlogService(context);
