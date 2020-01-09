@@ -3,6 +3,8 @@ using BlogSystem.Business.Implements;
 using BlogSystem.DataAccess.DataContext;
 using BlogSystem.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using BlogSystem.Business.Domain;
+using BlogSystem.Business.Exceptions;
 using Xunit;
 
 namespace BlogSystem.Business.Tests.Implements
@@ -29,6 +31,59 @@ namespace BlogSystem.Business.Tests.Implements
                 var service = new BlogService(context);
                 var result = await service.GetBlogsAsync();
                 Assert.Equal(3, result.Count);
+            }
+
+            // * clear all data items in database for other tests
+            using (var context = new BlogContext(options))
+            {
+                foreach(var blog in context.Blogs)
+                    context.Blogs.Remove(blog);
+                context.SaveChanges();
+            }
+        }
+
+        [Fact]
+        public async Task GetBlogAsync_Should_Return_Assigned_Blog()
+        {
+            var options = new DbContextOptionsBuilder<BlogContext>()
+                .UseInMemoryDatabase(databaseName: "TestBlogsDb")
+                .Options;
+
+            using (var context = new BlogContext(options))
+            {
+                context.Blogs.Add(new BlogEntity { Id = 1, Title = "aaa" });
+                context.Blogs.Add(new BlogEntity { Id = 2, Title = "bbb" });
+                context.Blogs.Add(new BlogEntity { Id = 3, Title = "ccc" });
+                context.SaveChanges();
+            }
+
+            using (var context = new BlogContext(options))
+            {
+                var service = new BlogService(context);
+                var blog = await service.GetBlogAsync(2);
+                Assert.Equal("bbb", blog.Title);
+            }
+
+            // * clear all data items in database for other tests
+            using (var context = new BlogContext(options))
+            {
+                foreach(var blog in context.Blogs)
+                    context.Blogs.Remove(blog);
+                context.SaveChanges();
+            }
+        }
+
+        [Fact]
+        public async Task ModifyBlogAsync_Should_Throw_NoSuchBlogException()
+        {
+            var options = new DbContextOptionsBuilder<BlogContext>()
+                .UseInMemoryDatabase(databaseName: "TestBlogsDb")
+                .Options;
+
+            using (var context = new BlogContext(options))
+            {
+                var service = new BlogService(context);
+                await Assert.ThrowsAsync<NoSuchBlogException>(() => service.ModifyBlogAsync(new Blog()));
             }
         }
     }

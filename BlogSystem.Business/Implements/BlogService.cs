@@ -37,6 +37,7 @@ namespace BlogSystem.Business.Implements
             return _blog.ToBlog();
         }
 
+        // * It maybe does not need a unit test.
         public async Task<Blog> CreateBlogAsync(Blog blog)
         {
             // To prevent the blog id be assigned by over post.
@@ -50,6 +51,7 @@ namespace BlogSystem.Business.Implements
             return _blog.ToBlog();
         }
 
+        // * It maybe only need to test the sad path.
         public async Task ModifyBlogAsync(Blog blog)
         {
             BlogEntity _blog = blog.ToBlogEntity();
