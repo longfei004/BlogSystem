@@ -20,7 +20,7 @@ namespace BlogSystem.Business.Tests.Implements
                 .Options;
         }
 
-        private void InsertSeedDatas()
+        private void InsertSeedDataItems()
         {
             using (var context = new BlogContext(options))
             {
@@ -44,7 +44,7 @@ namespace BlogSystem.Business.Tests.Implements
         [Fact]
         public async Task GetBlogsAsync_Should_Return_BlogList()
         {
-            this.InsertSeedDatas();
+            this.InsertSeedDataItems();
 
             using (var context = new BlogContext(options))
             {
@@ -59,7 +59,7 @@ namespace BlogSystem.Business.Tests.Implements
         [Fact]
         public async Task GetBlogAsync_Should_Return_Assigned_Blog()
         {
-            this.InsertSeedDatas();
+            this.InsertSeedDataItems();
 
             using (var context = new BlogContext(options))
             {
