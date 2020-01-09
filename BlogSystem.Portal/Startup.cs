@@ -23,7 +23,9 @@ namespace BlogSystem.Portal
         public void ConfigureServices (IServiceCollection services)
         {
             services.AddControllers ();
-            services.AddDbContext<BlogContext>(opt => opt.UseInMemoryDatabase("Blogs"));
+            services.AddDbContext<BlogContext>(opt => 
+            opt.UseSqlite(Configuration
+                    .GetConnectionString("BlogContext"), b => b.MigrationsAssembly("BlogSystem.Portal")));
 
             services.AddTransient<IBlogService, BlogService>();
         }
