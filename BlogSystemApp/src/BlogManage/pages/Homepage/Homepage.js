@@ -17,7 +17,7 @@ const Homepage = () => {
     return (
         <div className='homepage'>
         { blogs !==[] ? <BlogList blogs={blogs} /> : <p>This is no any blog!</p> }
-        <div className='side-item'></div>
+        <div className='home-side-item'></div>
         </div>
     )
 }
