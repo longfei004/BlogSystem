@@ -9,7 +9,7 @@ const UserDropDown = () => {
         <Menu>
             <Menu.Item key="1">
                 <div className='user-item'>
-                    <Link to='/blogs/edit'>我的博客</Link>
+                    <Link to='/blogs/manage'>我的博客</Link>
                 </div>
             </Menu.Item>
         </Menu>
