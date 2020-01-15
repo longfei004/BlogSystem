@@ -32,6 +32,7 @@ const BlogEdit = () => {
                 </div>
                 <div className='submit-type'>
                     <button className='publish-blog' onClick={() => handleOnPublish()}>发布</button>
+                    <button className='go-back' onClick={() => history.goBack()}>返回</button>
                 </div>
             </div>
         </div>
