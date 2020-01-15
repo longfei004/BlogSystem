@@ -28,8 +28,10 @@ namespace BlogSystem.Portal
 
             services.AddTransient<IBlogService, BlogService>();
 
-            services.AddCors(option => option.AddPolicy("cors", policy =>
-                policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins(new [] { "https://localhost:8088" })));
+            services.AddCors(options =>
+                options.AddPolicy("AllowMyOrigin", builder =>
+                    builder.WithOrigins("http://localhost:8088")
+                            .AllowAnyHeader().AllowAnyMethod()));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,10 +45,7 @@ namespace BlogSystem.Portal
 
             app.UseRouting();
 
-            app.UseCors(builder =>
-            {
-                builder.WithOrigins("http://localhost:8088");
-            });
+            app.UseCors("AllowMyOrigin");
 
             app.UseAuthorization();
 
