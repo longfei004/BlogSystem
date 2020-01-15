@@ -14,8 +14,8 @@ const BlogDetail = (props) => {
 
     return (
         <div className='blog-container'>
-        <div className='detail-side-bar'></div>
-        {blog !== undefined && <BlogContent blog={blog} /> }
+            <div className='detail-side-bar'></div>
+            {blog !== undefined && <BlogContent blog={blog} />}
         </div>
     )
 }

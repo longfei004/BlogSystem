@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router';
 import Header from './BlogManage/components/Header/Header';
 import Homepage from './BlogManage/pages/Homepage/Homepage';
 import BlogDetail from './BlogManage/pages/BlogDetail/BlogDetail';
+import BlogEdit from './BlogManage/pages/BlogEdit/BlogEdit';
 import './App.less';
 
 class App extends Component {
@@ -14,6 +15,7 @@ class App extends Component {
                     <Header />
                     <div className='page-container'>
                         <Switch>
+                            <Route exact path='/blog/edit/:id?' component={BlogEdit} />
                             <Route exact path='/blog/:id' component={BlogDetail} />
                             <Route exact path='/' component={Homepage} />
                         </Switch>
