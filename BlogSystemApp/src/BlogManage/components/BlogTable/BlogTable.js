@@ -7,7 +7,7 @@ const BlogTable = ({ blogs }) => {
     const blogList = blogs.map(blog => {
         return (
             <tr key={'blogTable' + blog.id}>
-                <td>{blog.title}</td>
+                <td className='table-title'><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></td>
                 <td>已发布</td>
                 <td></td>
                 <td></td>
