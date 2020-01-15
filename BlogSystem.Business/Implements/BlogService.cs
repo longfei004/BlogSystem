@@ -22,7 +22,7 @@ namespace BlogSystem.Business.Implements
 
         public async Task<List<Blog>> GetBlogsAsync()
         {
-            List<BlogEntity> _blogs = await _context.Blogs.ToListAsync();
+            List<BlogEntity> _blogs = await _context.Blogs.OrderByDescending(b => b.Id).ToListAsync();
             List<Blog> blogs = new List<Blog>();
 
             _blogs.ForEach(_blog => blogs.Add(_blog.ToBlog()));
