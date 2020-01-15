@@ -18,3 +18,13 @@ export const postBlog = (blog) =>
         body: JSON.stringify(blog)
     }).then(response => response.json())
     .catch(() => alert('Can not post the blog!'));
+
+export const modifyBlog = (id, blog) =>
+    fetch(`https://localhost:5001/blogs/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(blog)
+    })
+    .catch(() => alert('Can not post the blog!'));
