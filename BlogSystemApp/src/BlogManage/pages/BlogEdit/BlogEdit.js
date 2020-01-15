@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { postBlog } from '../../api/BlogApi';
+import history from '../../../history';
 import './BlogEdit.less';
 
 const BlogEdit = () => {
@@ -13,7 +14,9 @@ const BlogEdit = () => {
         });
 
     const handleOnPublish = () => {
-        postBlog(blog);
+        postBlog(blog)
+            .then(result => '/blogs/' + result.id)
+            .then(path => history.push(path));
     }
 
     return (
@@ -21,11 +24,11 @@ const BlogEdit = () => {
             <div className='edit-container'>
                 <div className='edit-title'>
                     <label>标题</label>
-                    <input type='text' className='title-input' onChange={e => handleOnBlogChange({title: e.target.value})} />
+                    <input type='text' className='title-input' onChange={e => handleOnBlogChange({ title: e.target.value })} />
                 </div>
                 <div className='edit-content'>
                     <label>正文</label>
-                    <textarea className='content-input' onChange={e => handleOnBlogChange({content: e.target.value})} />
+                    <textarea className='content-input' onChange={e => handleOnBlogChange({ content: e.target.value })} />
                 </div>
                 <div className='submit-type'>
                     <button className='publish-blog' onClick={() => handleOnPublish()}>发布</button>

@@ -16,5 +16,5 @@ export const postBlog = (blog) =>
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(blog)
-    })
+    }).then(response => response.json())
     .catch(() => alert('Can not post the blog!'));

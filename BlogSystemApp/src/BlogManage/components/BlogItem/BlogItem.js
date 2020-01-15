@@ -4,7 +4,7 @@ import './BlogItem.less';
 
 const BlogItem = ({bolgContent}) => {
     const Title = bolgContent.title;
-    const path = `/blog/${bolgContent.id}`;
+    const path = `/blogs/${bolgContent.id}`;
 
     return (
         <div className='blog-item'>
