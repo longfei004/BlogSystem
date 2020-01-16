@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { toLocalTime } from '../../../utils/DateUtils';
 import UserLogo from '../../../assets/avatar.jpg';
 import './BlogContent.less';
 
@@ -11,7 +12,7 @@ const BlogContent = ({ blog }) => {
                 <img className='user-logo-view' src={UserLogo} alt='This image is not exist!' />
                 <div className='blog-info'>
                     <p className='name-info'>刘龙飞</p>
-                    <p className='last-edit-date'>2020.01.01 20:00:00</p>
+                    <p className='last-edit-date'>{toLocalTime(blog.lastUpdateTime)}</p>
                 </div>
                 <div className='back-home'>
                     <Link to='/'>返回首页</Link>
