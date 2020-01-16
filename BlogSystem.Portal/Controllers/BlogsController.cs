@@ -7,6 +7,7 @@ using BlogSystem.Business.Exceptions;
 using BlogSystem.Portal.ResponseModels;
 using BlogSystem.Portal.RequestModles;
 using BlogSystem.Portal.Extensions;
+using System.Linq;
 
 namespace BlogSystem.Portal.Controllers
 {
@@ -25,11 +26,7 @@ namespace BlogSystem.Portal.Controllers
         public async Task<ActionResult<IEnumerable<BlogResponse>>> GetBlogs()
         {
             List<Blog> blogs = await _blogService.GetBlogsAsync();
-            List<BlogResponse> blogResponses = new List<BlogResponse>();
-
-            blogs.ForEach(blog => blogResponses.Add(blog.ToBlogResponse()));
-
-            return blogResponses;
+            return blogs.Select(blog => blog.ToBlogResponse()).ToList();
         }
 
         [HttpGet("{id}")]

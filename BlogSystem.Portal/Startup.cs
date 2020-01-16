@@ -24,6 +24,7 @@ namespace BlogSystem.Portal
         {
             services.AddControllers().AddJsonOptions(options =>
                 options.JsonSerializerOptions.Converters.Add(new DateTimeConverter()));
+
             services.AddDbContext<BlogContext>(opt =>
                 opt.UseSqlite(Configuration
                     .GetConnectionString("BlogContext"), b => b.MigrationsAssembly("BlogSystem.Portal")));
