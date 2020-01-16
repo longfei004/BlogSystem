@@ -14,7 +14,8 @@ namespace BlogSystem.Business.Extensions
             {
                 Id = blogEntity.Id,
                 Title = blogEntity.Title,
-                Content = blogEntity.Content
+                Content = blogEntity.Content,
+                LastUpdateTime = blogEntity.LastUpdateTime
             };
         }
     }

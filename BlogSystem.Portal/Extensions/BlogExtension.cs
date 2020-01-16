@@ -14,7 +14,8 @@ namespace BlogSystem.Portal.Extensions
             {
                 Id = blog.Id,
                 Title = blog.Title,
-                Content = blog.Content
+                Content = blog.Content,
+                LastUpdateTime = blog.LastUpdateTime
             };
         }
     }

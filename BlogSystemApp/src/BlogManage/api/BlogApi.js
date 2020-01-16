@@ -17,7 +17,7 @@ export const postBlog = (blog) =>
         },
         body: JSON.stringify(blog)
     }).then(response => response.json())
-    .catch(() => alert('Can not post the blog!'));
+    .catch(() => alert('Can not save the blog!'));
 
 export const modifyBlog = (id, blog) =>
     fetch(`https://localhost:5001/blogs/${id}`, {
@@ -27,4 +27,10 @@ export const modifyBlog = (id, blog) =>
         },
         body: JSON.stringify(blog)
     })
-    .catch(() => alert('Can not post the blog!'));
+    .catch(() => alert('Can not save the blog!'));
+
+export const deleteBlog = (id) =>
+    fetch(`https://localhost:5001/blogs/${id}`, {
+        method: 'DELETE',
+    })
+    .catch(() => alert('Can not delete the blog!'));

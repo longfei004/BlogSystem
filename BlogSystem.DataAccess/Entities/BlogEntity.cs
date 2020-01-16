@@ -1,3 +1,4 @@
+using System;
 
 namespace BlogSystem.DataAccess.Entities
 {
@@ -6,5 +7,6 @@ namespace BlogSystem.DataAccess.Entities
         public long Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
+        public DateTime LastUpdateTime { get; set; }
     }
 }

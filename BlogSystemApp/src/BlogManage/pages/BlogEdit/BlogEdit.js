@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { postBlog, getBlog, modifyBlog } from '../../api/BlogApi';
 import history from '../../../history';
+import { getUTCNow, toLocalTime } from '../../../utils/DateUtils';
 import './BlogEdit.less';
 
 const BlogEdit = (props) => {
@@ -24,14 +25,21 @@ const BlogEdit = (props) => {
         });
 
     const handleOnPublish = () => {
+        const newBlog = {
+            ...blog,
+            lastUpdateTime: getUTCNow()
+        };
+
         if (blogId !== undefined) {
-            modifyBlog(blogId, blog)
+            modifyBlog(blogId, newBlog)
                 .then(() => history.push(`/blogs/${blogId}`));
         } else {
-            postBlog(blog)
+            postBlog(newBlog)
                 .then(result => '/blogs/' + result.id)
                 .then(path => history.push(path));
         }
+
+        setBlog(newBlog);
     }
 
     return (

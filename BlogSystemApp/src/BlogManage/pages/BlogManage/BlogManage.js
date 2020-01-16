@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { getBlogs } from '../../api/BlogApi';
+import { getBlogs, deleteBlog } from '../../api/BlogApi';
 import BlogTable from '../../components/BlogTable/BlogTable';
 import './BlogManage.less';
 
@@ -12,12 +12,19 @@ const BlogManage = () => {
             if (result !== undefined)
                 setBlogs(result);
         });
-    }, [])
+    }, []);
+
+    const handleOnDelete = (id) => {
+        const newBlogs = blogs.filter(blog => blog.id !== id);
+
+        deleteBlog(id)
+            .then(() => setBlogs(newBlogs));
+    }
 
     return (
         <div className='blog-manage'>
             <div className='blog-manage-container'>
-                { blogs !== [] && <BlogTable blogs={blogs} />}
+                { blogs !== [] && <BlogTable blogs={blogs} handleOnDelete={handleOnDelete}/>}
             </div>
         </div>
     )

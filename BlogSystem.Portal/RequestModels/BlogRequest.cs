@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using BlogSystem.Business.Domain;
 
@@ -12,6 +13,8 @@ namespace BlogSystem.Portal.RequestModles
 
         public string Content { get; set; }
 
+        public DateTime LastUpdateTime { get; set; }
+
         public Blog ToBlog()
         {
             if(this == null)
@@ -21,7 +24,8 @@ namespace BlogSystem.Portal.RequestModles
             {
                 Id = this.Id,
                 Title = this.Title,
-                Content = this.Content
+                Content = this.Content,
+                LastUpdateTime = this.LastUpdateTime
             };
         }
     }

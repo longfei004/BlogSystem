@@ -1,3 +1,5 @@
+using System;
+
 namespace BlogSystem.Portal.ResponseModels
 {
     public class BlogResponse
@@ -5,5 +7,6 @@ namespace BlogSystem.Portal.ResponseModels
         public long Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
+        public DateTime LastUpdateTime { get; set; }
     }
 }

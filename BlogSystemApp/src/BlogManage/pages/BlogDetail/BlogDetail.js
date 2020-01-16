@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { getBlog } from '../../api/BlogApi';
+import { toLocalTime } from '../../../utils/DateUtils';
 import BlogContent from '../../components/BlogContent/BlogContent';
 import './BlogDetail.less';
 

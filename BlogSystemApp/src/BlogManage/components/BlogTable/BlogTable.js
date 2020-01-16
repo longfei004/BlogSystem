@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './BlogTable.less';
 
-const BlogTable = ({ blogs }) => {
+const BlogTable = ({ blogs, handleOnDelete }) => {
 
     const blogList = blogs.map(blog => {
         return (
@@ -12,8 +12,10 @@ const BlogTable = ({ blogs }) => {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>
+                <td className='table-action'>
                     <Link to={`/blogs/edit/${blog.id}`}><span>编辑</span></Link>
+                    <span>|</span>
+                    <a><span className='table-delete' onClick={() => handleOnDelete(blog.id)}>删除</span></a>
                 </td>
             </tr>
         )
