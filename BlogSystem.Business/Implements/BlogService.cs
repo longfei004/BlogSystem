@@ -36,7 +36,6 @@ namespace BlogSystem.Business.Implements
 
         public Blog CreateBlog(Blog blog)
         {
-            blog.Id = 0; // To prevent the blog id be assigned by over post.
             BlogEntity createdBlog = _blogRepository.Add(blog.ToBlogEntity());
             _blogRepository.SaveChanges();
 

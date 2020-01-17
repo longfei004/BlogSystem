@@ -43,7 +43,7 @@ namespace BlogSystem.Portal.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Blog> PostBlog(BlogRequest blogRequest)
+        public ActionResult<Blog> PostBlog(CreateBlogRequest blogRequest)
         {
             Blog savedBlog = _blogService.CreateBlog(blogRequest.ToBlog());
 
@@ -51,7 +51,7 @@ namespace BlogSystem.Portal.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutBlog(long id, BlogRequest blogRequest)
+        public IActionResult PutBlog(long id, ModifyBlogRequest blogRequest)
         {
             if (id != blogRequest.Id)
                 return BadRequest();

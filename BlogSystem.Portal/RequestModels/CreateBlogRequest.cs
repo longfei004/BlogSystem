@@ -4,16 +4,14 @@ using BlogSystem.Business.Domain;
 
 namespace BlogSystem.Portal.RequestModles
 {
-    public class BlogRequest
+    public class CreateBlogRequest
     {
-        public long Id { get; set; }
-
         [Required]
         public string Title { get; set; }
 
         public string Content { get; set; }
-
-        public DateTime LastUpdateTime { get; set; }
+        [Required]
+        public DateTime? LastUpdateTime { get; set; }
 
         public Blog ToBlog()
         {
@@ -22,7 +20,6 @@ namespace BlogSystem.Portal.RequestModles
 
             return new Blog
             {
-                Id = this.Id,
                 Title = this.Title,
                 Content = this.Content,
                 LastUpdateTime = this.LastUpdateTime
