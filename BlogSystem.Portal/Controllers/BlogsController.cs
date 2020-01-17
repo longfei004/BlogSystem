@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BlogSystem.Business.Interface;
 using BlogSystem.Business.Domain;
@@ -23,56 +22,62 @@ namespace BlogSystem.Portal.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogResponse>>> GetBlogs()
+        public ActionResult<IEnumerable<BlogResponse>> GetBlogs()
         {
-            List<Blog> blogs = await _blogService.GetBlogsAsync();
+            List<Blog> blogs = _blogService.GetBlogs();
             return blogs.Select(blog => blog.ToBlogResponse()).ToList();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BlogResponse>> GetBlog(long id)
+        public ActionResult<BlogResponse> GetBlog(long id)
         {
-            Blog blog = await _blogService.GetBlogAsync(id);
-            if (blog == null)
+            try
+            {
+                Blog blog = _blogService.GetBlog(id);
+                return blog.ToBlogResponse();
+            }
+            catch(NoSuchBlogException)
+            {
                 return NotFound();
-
-            return blog.ToBlogResponse();
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<Blog>> PostBlog(BlogRequest blogRequest)
+        public ActionResult<Blog> PostBlog(BlogRequest blogRequest)
         {
-            Blog savedBlog = await _blogService.CreateBlogAsync(blogRequest.ToBlog());
+            Blog savedBlog = _blogService.CreateBlog(blogRequest.ToBlog());
 
             return CreatedAtAction(nameof(GetBlog), new { id = savedBlog.Id }, savedBlog);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBlog(long id, BlogRequest blogRequest)
+        public IActionResult PutBlog(long id, BlogRequest blogRequest)
         {
             if (id != blogRequest.Id)
                 return BadRequest();
 
             try
             {
-                await _blogService.ModifyBlogAsync(blogRequest.ToBlog());
+                _blogService.ModifyBlog(blogRequest.ToBlog());
+                return NoContent();
             }
             catch (NoSuchBlogException)
             {
                 return NotFound();
             }
-
-            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<BlogResponse>> DeleteBlog(long id)
+        public ActionResult<BlogResponse> DeleteBlog(long id)
         {
-            Blog blog = await _blogService.DeleteBlogAsync(id);
-            if (blog == null)
+            try
+            {
+                return _blogService.DeleteBlog(id).ToBlogResponse();
+            }
+            catch (NoSuchBlogException)
+            {
                 return NotFound();
-
-            return blog.ToBlogResponse();
+            }
         }
     }
 }

@@ -1,92 +1,75 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
 using BlogSystem.DataAccess.Entities;
-using BlogSystem.DataAccess.DataContext;
 using BlogSystem.Business.Domain;
 using BlogSystem.Business.Extensions;
 using BlogSystem.Business.Exceptions;
 using BlogSystem.Business.Interface;
+using BlogSystem.DataAccess.Repository;
 
 namespace BlogSystem.Business.Implements
 {
     public class BlogService : IBlogService
     {
-        private readonly BlogContext _context;
+        private readonly IRepository<BlogEntity> _blogRepository;
 
-        public BlogService(BlogContext context)
+        public BlogService(IRepository<BlogEntity> blogRepository)
         {
-            _context = context;
+            _blogRepository = blogRepository;
         }
 
-        public async Task<List<Blog>> GetBlogsAsync()
+        public List<Blog> GetBlogs()
         {
-            List<BlogEntity> _blogs = await _context.Blogs.OrderByDescending(b => b.Id).ToListAsync();
-            List<Blog> blogs = new List<Blog>();
+            List<BlogEntity> _blogs = _blogRepository.GetAll().OrderByDescending(b => b.Id).ToList();
 
-            _blogs.ForEach(_blog => blogs.Add(_blog.ToBlog()));
-
-            return blogs;
+            return _blogs.Select(blogEntity => blogEntity.ToBlog()).ToList();
         }
 
-        public async Task<Blog> GetBlogAsync(long id)
+        public Blog GetBlog(long id)
         {
-            BlogEntity _blog = await _context.Blogs.FindAsync(id);
-
+            BlogEntity _blog = _blogRepository.Get(b => id == b.Id);
+            if (_blog == null)
+                throw new NoSuchBlogException();
             return _blog.ToBlog();
         }
 
-        // * It maybe does not need a unit test.
-        public async Task<Blog> CreateBlogAsync(Blog blog)
+        public Blog CreateBlog(Blog blog)
         {
-            // To prevent the blog id be assigned by over post.
-            blog.Id = 0;
+            blog.Id = 0; // To prevent the blog id be assigned by over post.
+            BlogEntity createdBlog = _blogRepository.Add(blog.ToBlogEntity());
+            _blogRepository.SaveChanges();
 
-            BlogEntity _blog = blog.ToBlogEntity();
-
-            _context.Blogs.Add(_blog);
-            await _context.SaveChangesAsync();
-
-            return _blog.ToBlog();
+            return createdBlog.ToBlog();
         }
 
-        // * It maybe only need to test the sad path.
-        public async Task ModifyBlogAsync(Blog blog)
+        public void ModifyBlog(Blog blog)
         {
-            BlogEntity _blog = blog.ToBlogEntity();
-
-            _context.Entry(_blog).State = EntityState.Modified;
+            _blogRepository.Update(blog.ToBlogEntity());
 
             try
             {
-                await _context.SaveChangesAsync();
+                _blogRepository.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BlogExists(blog.Id))
+                if (!_blogRepository.IsExists(blog.ToBlogEntity()))
                     throw new NoSuchBlogException();
                 else
                     throw;
             }
         }
 
-        // * It maybe only need to test the sad path.
-        public async Task<Blog> DeleteBlogAsync(long id)
+        public Blog DeleteBlog(long id)
         {
-            var _blog = await _context.Blogs.FindAsync(id);
-            if (_blog == null)
-                return null;
+            var blogEntity = _blogRepository.Get(b => id == b.Id);
+            if(blogEntity == null)
+                throw new NoSuchBlogException();
 
-            _context.Blogs.Remove(_blog);
-            await _context.SaveChangesAsync();
+            _blogRepository.Delete(blogEntity);
+            _blogRepository.SaveChanges();
 
-            return _blog.ToBlog();
-        }
-
-        private bool BlogExists(long id)
-        {
-            return _context.Blogs.Any(e => e.Id == id);
+            return blogEntity.ToBlog();
         }
     }
 }

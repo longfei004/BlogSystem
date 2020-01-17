@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using BlogSystem.Business.Domain;
 
@@ -6,14 +5,14 @@ namespace BlogSystem.Business.Interface
 {
     public interface IBlogService
     {
-        Task<List<Blog>> GetBlogsAsync();
+        List<Blog> GetBlogs();
 
-        Task<Blog> GetBlogAsync(long id);
+        Blog GetBlog(long id);
 
-        Task<Blog> CreateBlogAsync(Blog blog);
+        Blog CreateBlog(Blog blog);
 
-        Task ModifyBlogAsync(Blog blog);
+        void ModifyBlog(Blog blog);
 
-        Task<Blog> DeleteBlogAsync(long id);
+        Blog DeleteBlog(long id);
     }
 }

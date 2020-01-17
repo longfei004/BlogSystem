@@ -1,6 +1,8 @@
 using BlogSystem.Business.Implements;
 using BlogSystem.Business.Interface;
 using BlogSystem.DataAccess.DataContext;
+using BlogSystem.DataAccess.Repository;
+using BlogSystem.DataAccess.Entities;
 using BlogSystem.Portal.Converts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,6 +30,8 @@ namespace BlogSystem.Portal
             services.AddDbContext<BlogContext>(opt =>
                 opt.UseSqlite(Configuration
                     .GetConnectionString("BlogContext"), b => b.MigrationsAssembly("BlogSystem.Portal")));
+
+            services.AddScoped<IRepository<BlogEntity>, BlogRepository<BlogEntity>>();
 
             services.AddTransient<IBlogService, BlogService>();
 
