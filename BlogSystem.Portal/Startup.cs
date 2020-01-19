@@ -4,6 +4,7 @@ using BlogSystem.DataAccess.DataContext;
 using BlogSystem.DataAccess.Repository;
 using BlogSystem.DataAccess.Entities;
 using BlogSystem.Portal.Converts;
+using BlogSystem.Portal.ExceptionHandleMiddleWare;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,8 @@ namespace BlogSystem.Portal
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandle();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
