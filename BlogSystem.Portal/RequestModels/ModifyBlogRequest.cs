@@ -12,7 +12,7 @@ namespace BlogSystem.Portal.RequestModles
         public string Title { get; set; }
 
         public string Content { get; set; }
-        [Required]
+        [Range(typeof(DateTime), "01/01/2000", "01/01/2100", ErrorMessage="Date is out of Range")]
         public DateTime LastUpdateTime { get; set; }
 
         public Blog ToBlog()
