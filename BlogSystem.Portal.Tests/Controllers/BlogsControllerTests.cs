@@ -1,16 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using BlogSystem.Business.Domain;
+using BlogSystem.Business.Exceptions;
+using BlogSystem.Business.Interface;
+using BlogSystem.Portal.Controllers;
+using BlogSystem.Portal.RequestModles;
+using BlogSystem.Portal.ResponseModels;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using BlogSystem.Business.Interface;
-using BlogSystem.Business.Domain;
-using BlogSystem.Portal.Controllers;
-using BlogSystem.Portal.ResponseModels;
-using BlogSystem.Portal.RequestModles;
-using BlogSystem.Business.Exceptions;
-
 
 namespace BlogSystem.Portal.Tests.Controllers
 {
@@ -20,150 +19,151 @@ namespace BlogSystem.Portal.Tests.Controllers
         {
             Id = 1,
             Title = "foo",
-            Content = "bar"
+            Content = "bar",
+            LastUpdateTime = new DateTime()
+        };
+
+        private ModifyBlogRequest modifyBlog = new ModifyBlogRequest
+        {
+            Id = 1,
+            Title = "foo",
+            Content = "bar",
+            LastUpdateTime = new DateTime()
         };
 
         [Fact]
-        public async Task GetBlogs_Should_Return_BlogResponse_List ()
+        public void GetBlogs_Should_Return_BlogResponse_List()
         {
-            var mockService = new Mock<IBlogService> ();
-            mockService.Setup (service => service.GetBlogsAsync ())
-                .ReturnsAsync (GetTestBlogs ());
-            var controller = new BlogsController (mockService.Object);
+            var mockService = new Mock<IBlogService>();
+            mockService.Setup(service => service.GetBlogs())
+                .Returns(GetTestBlogs());
+            var controller = new BlogsController(mockService.Object);
 
-            var result = await controller.GetBlogs ();
+            var result = controller.GetBlogs();
 
-            var blogs = Assert.IsAssignableFrom<IEnumerable<BlogResponse>> (result.Value);
-            Assert.Equal (2, blogs.ToList ().Count);
+            var blogs = Assert.IsAssignableFrom<IEnumerable<BlogResponse>>(result.Value);
+            Assert.Equal(2, blogs.ToList().Count);
         }
 
         [Fact]
-        public async Task GetBlog_Should_Return_Assigned_Blog ()
+        public void GetBlog_Should_Return_Assigned_Blog()
         {
-            var mockService = new Mock<IBlogService> ();
-            mockService.Setup (service => service.GetBlogAsync (1))
-                .ReturnsAsync (blogForTest);
-            var controller = new BlogsController (mockService.Object);
+            var mockService = new Mock<IBlogService>();
+            mockService.Setup(service => service.GetBlog(1))
+                .Returns(blogForTest);
+            var controller = new BlogsController(mockService.Object);
 
-            var result = await controller.GetBlog (1);
+            var result = controller.GetBlog(1);
 
-            var blog = Assert.IsAssignableFrom<BlogResponse> (result.Value);
-            Assert.Equal (1, blog.Id);
+            var blog = Assert.IsAssignableFrom<BlogResponse>(result.Value);
+            Assert.Equal(1, blog.Id);
         }
 
         [Fact]
-        public async Task GetBlog_Should_Return_NotFound_When_Blog_Is_Not_Exist ()
+        public void GetBlog_Should_Return_NotFound_When_Blog_Is_Not_Exist()
         {
-            var mockService = new Mock<IBlogService> ();
-            mockService.Setup (service => service.GetBlogAsync (1))
-                .ReturnsAsync (() => null);
-            var controller = new BlogsController (mockService.Object);
+            var mockService = new Mock<IBlogService>();
+            mockService.Setup(service => service.GetBlog(1))
+                .Throws(new NoSuchBlogException());
+            var controller = new BlogsController(mockService.Object);
 
-            var result = await controller.GetBlog (1);
+            var result = controller.GetBlog(1);
 
-            Assert.IsAssignableFrom<NotFoundResult> (result.Result);
+            Assert.IsAssignableFrom<NotFoundResult>(result.Result);
         }
 
         [Fact]
-        public async Task PostBlog_Should_Return_Created_With_Loacation ()
+        public void PostBlog_Should_Return_Created_With_Loacation()
         {
-            var mockService = new Mock<IBlogService> ();
-            mockService.Setup (service => service.CreateBlogAsync(It.IsAny<Blog>()))
-                .ReturnsAsync (blogForTest);
-            var controller = new BlogsController (mockService.Object);
+            var mockService = new Mock<IBlogService>();
+            mockService.Setup(service => service.CreateBlog(It.IsAny<Blog>()))
+                .Returns(blogForTest);
+            var controller = new BlogsController(mockService.Object);
 
-            var result = await controller.PostBlog(new BlogRequest());
+            var result = controller.PostBlog(new CreateBlogRequest());
 
-            var action = Assert.IsAssignableFrom<CreatedAtActionResult> (result.Result);
+            var action = Assert.IsAssignableFrom<CreatedAtActionResult>(result.Result);
         }
 
         [Fact]
-        public async Task PutBlog_Should_Return_No_Content ()
+        public void PutBlog_Should_Return_No_Content()
         {
-            var mockService = new Mock<IBlogService> ();
-            var controller = new BlogsController (mockService.Object);
+            var mockService = new Mock<IBlogService>();
+            var controller = new BlogsController(mockService.Object);
 
-            var result = await controller.PutBlog(1, new BlogRequest
-            {
-                Id = 1,
-                Title = "foo",
-                Content = "bar"
-            });
+            var result = controller.PutBlog(1, modifyBlog);
 
-            var action = Assert.IsAssignableFrom<NoContentResult> (result);
-            mockService.Verify(x => x.ModifyBlogAsync(It.IsAny<Blog>()), Times.Once());
+            var action = Assert.IsAssignableFrom<NoContentResult>(result);
+            mockService.Verify(x => x.ModifyBlog(It.IsAny<Blog>()), Times.Once());
         }
 
         [Fact]
-        public async Task PutBlog_Should_Return_Bad_Request_When_Id_Is_Not_Consistent ()
+        public void PutBlog_Should_Return_Bad_Request_When_Id_Is_Not_Consistent()
         {
-            var mockService = new Mock<IBlogService> ();
-            var controller = new BlogsController (mockService.Object);
+            var mockService = new Mock<IBlogService>();
+            var controller = new BlogsController(mockService.Object);
 
-            var result = await controller.PutBlog(1, new BlogRequest());
+            var result = controller.PutBlog(1, new ModifyBlogRequest());
 
-            var action = Assert.IsAssignableFrom<BadRequestResult> (result);
+            var action = Assert.IsAssignableFrom<BadRequestResult>(result);
         }
 
         [Fact]
-        public async Task PutBlog_Should_Return_Not_Found_When_Assigned_Blog_Is_Not_Exist ()
+        public void PutBlog_Should_Return_Not_Found_When_Assigned_Blog_Is_Not_Exist()
         {
-            var mockService = new Mock<IBlogService> ();
-            mockService.Setup(service => service.ModifyBlogAsync(It.IsAny<Blog>()))
-                .ThrowsAsync(new NoSuchBlogException());
-            var controller = new BlogsController (mockService.Object);
+            var mockService = new Mock<IBlogService>();
+            mockService.Setup(service => service.ModifyBlog(It.IsAny<Blog>()))
+                .Throws(new NoSuchBlogException());
+            var controller = new BlogsController(mockService.Object);
 
-            var result = await controller.PutBlog(1, new BlogRequest
-            {
-                Id = 1,
-                Title = "foo",
-                Content = "bar"
-            });
+            var result = controller.PutBlog(1, modifyBlog);
 
-            var action = Assert.IsAssignableFrom<NotFoundResult> (result);
+            var action = Assert.IsAssignableFrom<NotFoundResult>(result);
         }
 
         [Fact]
-        public async Task DeleteBlog_Should_Return_Ok ()
+        public void DeleteBlog_Should_Return_Ok()
         {
-            var mockService = new Mock<IBlogService> ();
-            mockService.Setup(service => service.DeleteBlogAsync(1))
-                .ReturnsAsync(blogForTest);
-            var controller = new BlogsController (mockService.Object);
+            var mockService = new Mock<IBlogService>();
+            mockService.Setup(service => service.DeleteBlog(1))
+                .Returns(blogForTest);
+            var controller = new BlogsController(mockService.Object);
 
-            var result = await controller.DeleteBlog(1);
+            var result = controller.DeleteBlog(1);
 
-            var blogResult = Assert.IsAssignableFrom<ActionResult<BlogResponse>> (result);
+            var blogResult = Assert.IsAssignableFrom<ActionResult<BlogResponse>>(result);
             Assert.Equal(1, blogResult.Value.Id);
         }
 
         [Fact]
-        public async Task DeleteBlog_Should_Return_Not_Found_When_Assigned_Blog_Is_Not_Exist ()
+        public void DeleteBlog_Should_Return_Not_Found_When_Assigned_Blog_Is_Not_Exist()
         {
-            var mockService = new Mock<IBlogService> ();
-            mockService.Setup(service => service.DeleteBlogAsync(1))
-                .ReturnsAsync(() => null);
-            var controller = new BlogsController (mockService.Object);
+            var mockService = new Mock<IBlogService>();
+            mockService.Setup(service => service.DeleteBlog(1))
+                .Throws(new NoSuchBlogException());
+            var controller = new BlogsController(mockService.Object);
 
-            var result = await controller.DeleteBlog(1);
+            var result = controller.DeleteBlog(1);
 
-            Assert.IsAssignableFrom<NotFoundResult> (result.Result);
+            Assert.IsAssignableFrom<NotFoundResult>(result.Result);
         }
 
-        private List<Blog> GetTestBlogs ()
+        private List<Blog> GetTestBlogs()
         {
-            var blogList = new List<Blog> ();
-            blogList.Add (new Blog
+            var blogList = new List<Blog>();
+            blogList.Add(new Blog
             {
                 Id = 1,
                 Title = "foo",
-                Content = "bar"
+                Content = "bar",
+                LastUpdateTime = new DateTime()
             });
-            blogList.Add (new Blog
+            blogList.Add(new Blog
             {
                 Id = 2,
                 Title = "foo2",
-                Content = "bar2"
+                Content = "bar2",
+                LastUpdateTime = new DateTime()
             });
 
             return blogList;
