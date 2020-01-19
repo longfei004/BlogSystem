@@ -1,95 +1,72 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using BlogSystem.Business.Implements;
-using BlogSystem.DataAccess.DataContext;
-using BlogSystem.DataAccess.Entities;
-using Microsoft.EntityFrameworkCore;
 using BlogSystem.Business.Domain;
 using BlogSystem.Business.Exceptions;
+using BlogSystem.Business.Implements;
+using BlogSystem.DataAccess.Entities;
+using BlogSystem.DataAccess.Repository;
+using Moq;
 using Xunit;
 
 namespace BlogSystem.Business.Tests.Implements
 {
     public class BlogServiceTests
     {
-        private DbContextOptions<BlogContext> options;
+        private Mock<IRepository<BlogEntity>> _blogRepository;
+        private BlogService _service;
 
         public BlogServiceTests()
         {
-            this.options = new DbContextOptionsBuilder<BlogContext>()
-                .UseInMemoryDatabase(databaseName: "TestBlogsDb")
-                .Options;
+            _blogRepository = new Mock<IRepository<BlogEntity>>();
+            _service = new BlogService(_blogRepository.Object);
         }
 
-        private void InsertSeedDataItems()
+        private List<BlogEntity> MockSeedDataItems()
         {
-            using (var context = new BlogContext(options))
-            {
-                context.Blogs.Add(new BlogEntity { Id = 1, Title = "aaa" });
-                context.Blogs.Add(new BlogEntity { Id = 2, Title = "bbb" });
-                context.Blogs.Add(new BlogEntity { Id = 3, Title = "ccc" });
-                context.SaveChanges();
-            }
-        }
-
-        private void ClearAllDataItems()
-        {
-            using (var context = new BlogContext(options))
-            {
-                foreach(var blog in context.Blogs)
-                    context.Blogs.Remove(blog);
-                context.SaveChanges();
-            }
+            List<BlogEntity> blogEntities = new List<BlogEntity>();
+            blogEntities.Add(new BlogEntity{Id = 1, Title="foo1", Content="bar1", LastUpdateTime=new DateTime()});
+            blogEntities.Add(new BlogEntity{Id = 2, Title="foo2", Content="bar2", LastUpdateTime=new DateTime()});
+            blogEntities.Add(new BlogEntity{Id = 3, Title="foo3", Content="bar3", LastUpdateTime=new DateTime()});
+            return blogEntities;
         }
 
         [Fact]
-        public async Task GetBlogsAsync_Should_Return_BlogList()
+        public void GetBlogs_Should_Return_BlogList()
         {
-            this.InsertSeedDataItems();
+            _blogRepository.Setup(repo => repo.GetAll(It.IsAny<Func<BlogEntity, bool>>()))
+                .Returns(MockSeedDataItems());
+            
+            var result = _service.GetBlogs();
 
-            using (var context = new BlogContext(options))
-            {
-                var service = new BlogService(context);
-                var result = await service.GetBlogsAsync();
-                Assert.Equal(3, result.Count);
-            }
-
-            this.ClearAllDataItems();
+            var blogs = Assert.IsAssignableFrom<List<Blog>>(result);
+            Assert.Equal(3, blogs.Count);
         }
 
         [Fact]
-        public async Task GetBlogAsync_Should_Return_Assigned_Blog()
+        public void GetBlog_Should_Return_Assigned_Blog()
         {
-            this.InsertSeedDataItems();
+            _blogRepository.Setup(repo => repo.Get(It.IsAny<Func<BlogEntity, bool>>()))
+                .Returns(new BlogEntity{Id = 1, Title="foo"});
+            
+            var result = _service.GetBlog(1);
 
-            using (var context = new BlogContext(options))
-            {
-                var service = new BlogService(context);
-                var blog = await service.GetBlogAsync(2);
-                Assert.Equal("bbb", blog.Title);
-            }
-
-            this.ClearAllDataItems();
+            Assert.Equal("foo", result.Title);
         }
 
         [Fact]
-        public async Task ModifyBlogAsync_Should_Throw_NoSuchBlogException_When_Assigned_Blog_Is_Not_Exist()
+        public void ModifyBlog_Should_Throw_NoSuchBlogException_When_Assigned_Blog_Is_Not_Exist()
         {
-            using (var context = new BlogContext(options))
-            {
-                var service = new BlogService(context);
-                await Assert.ThrowsAsync<NoSuchBlogException>(() => service.ModifyBlogAsync(new Blog()));
-            }
+            _blogRepository.Setup(repo => repo.SaveChanges())
+                .Throws(new Exception());
+
+            Assert.Throws<NoSuchBlogException>(() => _service.ModifyBlog(new Blog()));
         }
 
         [Fact]
-        public async Task DeleteBlogAsync_Should_Return_Null_When_Assigned_Blog_Is_Not_Exist()
+        public void DeleteBlog_Should_Return_Null_When_Assigned_Blog_Is_Not_Exist()
         {
-            using (var context = new BlogContext(options))
-            {
-                var service = new BlogService(context);
-                var blog = await service.DeleteBlogAsync(1);
-                Assert.Null(blog);
-            }
+            Assert.Throws<NoSuchBlogException>(() => _service.DeleteBlog(1));
         }
     }
 }

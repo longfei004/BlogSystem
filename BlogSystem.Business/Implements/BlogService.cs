@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BlogSystem.DataAccess.Entities;
@@ -50,7 +50,7 @@ namespace BlogSystem.Business.Implements
             {
                 _blogRepository.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
                 if (!_blogRepository.IsExists(blog.ToBlogEntity()))
                     throw new NoSuchBlogException();

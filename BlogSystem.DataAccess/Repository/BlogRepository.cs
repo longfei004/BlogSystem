@@ -66,5 +66,10 @@ namespace BlogSystem.DataAccess.Repository
         {
             _context.SaveChanges();
         }
+
+        public int Length()
+        {
+            return _objectSet.Count();
+        }
     }
 }

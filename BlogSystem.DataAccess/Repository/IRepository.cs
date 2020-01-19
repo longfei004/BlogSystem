@@ -12,5 +12,6 @@ namespace BlogSystem.DataAccess.Repository
         T Delete(T entity);
         bool IsExists(T entity);
         void SaveChanges();
+        int Length();
     }
 }
