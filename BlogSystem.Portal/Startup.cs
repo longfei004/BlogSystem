@@ -1,8 +1,8 @@
 using BlogSystem.Business.Implements;
 using BlogSystem.Business.Interface;
 using BlogSystem.DataAccess.DataContext;
-using BlogSystem.DataAccess.Repository;
 using BlogSystem.DataAccess.Entities;
+using BlogSystem.DataAccess.Repository;
 using BlogSystem.Portal.Converts;
 using BlogSystem.Portal.ExceptionHandleMiddleWare;
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +39,8 @@ namespace BlogSystem.Portal
             services.AddCors(options =>
                 options.AddPolicy("AllowMyOrigin", builder =>
                     builder.WithOrigins("http://localhost:8088").AllowAnyHeader().AllowAnyMethod()));
+
+            services.AddSwaggerDocument();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -49,6 +51,9 @@ namespace BlogSystem.Portal
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             app.UseHttpsRedirection();
 
