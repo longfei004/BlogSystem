@@ -13,7 +13,7 @@ namespace BlogSystem.Portal.RequestModles
 
         public string Content { get; set; }
         [Required]
-        public DateTime? LastUpdateTime { get; set; }
+        public DateTime LastUpdateTime { get; set; }
 
         public Blog ToBlog()
         {

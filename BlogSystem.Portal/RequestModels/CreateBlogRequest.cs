@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 using BlogSystem.Business.Domain;
 
 namespace BlogSystem.Portal.RequestModles
@@ -10,8 +11,9 @@ namespace BlogSystem.Portal.RequestModles
         public string Title { get; set; }
 
         public string Content { get; set; }
-        [Required]
-        public DateTime? LastUpdateTime { get; set; }
+
+        [Range(typeof(DateTime), "01/01/2000", "01/01/2100", ErrorMessage="Date is out of Range")]
+        public DateTime LastUpdateTime { get; set; }
 
         public Blog ToBlog()
         {
