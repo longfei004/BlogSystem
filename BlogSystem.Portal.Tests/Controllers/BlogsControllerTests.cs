@@ -15,6 +15,15 @@ namespace BlogSystem.Portal.Tests.Controllers
 {
     public class BlogsControllerTests
     {
+        private Mock<IBlogService> mockService;
+        private BlogsController controller;
+
+        public BlogsControllerTests()
+        {
+            mockService = new Mock<IBlogService>();
+            controller = new BlogsController(mockService.Object);
+        }
+
         private Blog blogForTest = new Blog
         {
             Id = 1,
@@ -34,10 +43,8 @@ namespace BlogSystem.Portal.Tests.Controllers
         [Fact]
         public void GetBlogs_Should_Return_BlogResponse_List()
         {
-            var mockService = new Mock<IBlogService>();
             mockService.Setup(service => service.GetBlogs())
                 .Returns(GetTestBlogs());
-            var controller = new BlogsController(mockService.Object);
 
             var result = controller.GetBlogs();
 
@@ -48,10 +55,8 @@ namespace BlogSystem.Portal.Tests.Controllers
         [Fact]
         public void GetBlog_Should_Return_Assigned_Blog()
         {
-            var mockService = new Mock<IBlogService>();
             mockService.Setup(service => service.GetBlog(1))
                 .Returns(blogForTest);
-            var controller = new BlogsController(mockService.Object);
 
             var result = controller.GetBlog(1);
 
@@ -62,10 +67,8 @@ namespace BlogSystem.Portal.Tests.Controllers
         [Fact]
         public void GetBlog_Should_Return_NotFound_When_Blog_Is_Not_Exist()
         {
-            var mockService = new Mock<IBlogService>();
             mockService.Setup(service => service.GetBlog(1))
                 .Throws(new NoSuchBlogException());
-            var controller = new BlogsController(mockService.Object);
 
             var result = controller.GetBlog(1);
 
@@ -73,12 +76,10 @@ namespace BlogSystem.Portal.Tests.Controllers
         }
 
         [Fact]
-        public void PostBlog_Should_Return_Created_With_Loacation()
+        public void PostBlog_Should_Return_Created()
         {
-            var mockService = new Mock<IBlogService>();
             mockService.Setup(service => service.CreateBlog(It.IsAny<Blog>()))
                 .Returns(blogForTest);
-            var controller = new BlogsController(mockService.Object);
 
             var result = controller.PostBlog(new CreateBlogRequest());
 
@@ -88,9 +89,6 @@ namespace BlogSystem.Portal.Tests.Controllers
         [Fact]
         public void PutBlog_Should_Return_No_Content()
         {
-            var mockService = new Mock<IBlogService>();
-            var controller = new BlogsController(mockService.Object);
-
             var result = controller.PutBlog(1, modifyBlog);
 
             var action = Assert.IsAssignableFrom<NoContentResult>(result);
@@ -100,9 +98,6 @@ namespace BlogSystem.Portal.Tests.Controllers
         [Fact]
         public void PutBlog_Should_Return_Bad_Request_When_Id_Is_Not_Consistent()
         {
-            var mockService = new Mock<IBlogService>();
-            var controller = new BlogsController(mockService.Object);
-
             var result = controller.PutBlog(1, new ModifyBlogRequest());
 
             var action = Assert.IsAssignableFrom<BadRequestResult>(result);
@@ -111,10 +106,8 @@ namespace BlogSystem.Portal.Tests.Controllers
         [Fact]
         public void PutBlog_Should_Return_Not_Found_When_Assigned_Blog_Is_Not_Exist()
         {
-            var mockService = new Mock<IBlogService>();
             mockService.Setup(service => service.ModifyBlog(It.IsAny<Blog>()))
                 .Throws(new NoSuchBlogException());
-            var controller = new BlogsController(mockService.Object);
 
             var result = controller.PutBlog(1, modifyBlog);
 
@@ -124,10 +117,8 @@ namespace BlogSystem.Portal.Tests.Controllers
         [Fact]
         public void DeleteBlog_Should_Return_Ok()
         {
-            var mockService = new Mock<IBlogService>();
             mockService.Setup(service => service.DeleteBlog(1))
                 .Returns(blogForTest);
-            var controller = new BlogsController(mockService.Object);
 
             var result = controller.DeleteBlog(1);
 
@@ -138,10 +129,8 @@ namespace BlogSystem.Portal.Tests.Controllers
         [Fact]
         public void DeleteBlog_Should_Return_Not_Found_When_Assigned_Blog_Is_Not_Exist()
         {
-            var mockService = new Mock<IBlogService>();
             mockService.Setup(service => service.DeleteBlog(1))
                 .Throws(new NoSuchBlogException());
-            var controller = new BlogsController(mockService.Object);
 
             var result = controller.DeleteBlog(1);
 

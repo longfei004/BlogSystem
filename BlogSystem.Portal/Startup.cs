@@ -31,14 +31,13 @@ namespace BlogSystem.Portal
                 opt.UseSqlite(Configuration
                     .GetConnectionString("BlogContext"), b => b.MigrationsAssembly("BlogSystem.Portal")));
 
-            services.AddScoped<IRepository<BlogEntity>, BlogRepository<BlogEntity>>();
+            services.AddTransient<IRepository<BlogEntity>, BlogRepository<BlogEntity>>();
 
             services.AddTransient<IBlogService, BlogService>();
 
             services.AddCors(options =>
                 options.AddPolicy("AllowMyOrigin", builder =>
-                    builder.WithOrigins("http://localhost:8088")
-                    .AllowAnyHeader().AllowAnyMethod()));
+                    builder.WithOrigins("http://localhost:8088").AllowAnyHeader().AllowAnyMethod()));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
