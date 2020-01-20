@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using BlogSystem.Business.Domain;
 using BlogSystem.Business.Exceptions;
 using BlogSystem.Business.Implements;
@@ -8,18 +7,21 @@ using BlogSystem.DataAccess.Entities;
 using BlogSystem.DataAccess.Repository;
 using Moq;
 using Xunit;
+using AutoMapper;
 
 namespace BlogSystem.Business.Tests.Implements
 {
     public class BlogServiceTests
     {
         private Mock<IRepository<BlogEntity>> _blogRepository;
+        private Mock<IMapper> _mapper;
         private BlogService _service;
 
         public BlogServiceTests()
         {
             _blogRepository = new Mock<IRepository<BlogEntity>>();
-            _service = new BlogService(_blogRepository.Object);
+            _mapper = new Mock<IMapper>();
+            _service = new BlogService(_blogRepository.Object, _mapper.Object);
         }
 
         private List<BlogEntity> MockSeedDataItems()
@@ -48,6 +50,8 @@ namespace BlogSystem.Business.Tests.Implements
         {
             _blogRepository.Setup(repo => repo.Get(It.IsAny<Func<BlogEntity, bool>>()))
                 .Returns(new BlogEntity{Id = 1, Title="foo"});
+            _mapper.Setup(mapper => mapper.Map<Blog>(It.IsAny<BlogEntity>()))
+                .Returns(new Blog{Title = "foo"});
             
             var result = _service.GetBlog(1);
 
