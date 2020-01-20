@@ -1,3 +1,4 @@
+using AutoMapper;
 using BlogSystem.Business.Implements;
 using BlogSystem.Business.Interface;
 using BlogSystem.DataAccess.DataContext;
@@ -41,6 +42,8 @@ namespace BlogSystem.Portal
                     builder.WithOrigins("http://localhost:8088").AllowAnyHeader().AllowAnyMethod()));
 
             services.AddSwaggerDocument();
+
+            services.AddAutoMapper(typeof(Startup));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

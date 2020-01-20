@@ -10,18 +10,21 @@ using BlogSystem.Portal.ResponseModels;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
+using AutoMapper;
 
 namespace BlogSystem.Portal.Tests.Controllers
 {
     public class BlogsControllerTests
     {
         private Mock<IBlogService> mockService;
+        private Mock<IMapper> mockMapper;
         private BlogsController controller;
 
         public BlogsControllerTests()
         {
             mockService = new Mock<IBlogService>();
-            controller = new BlogsController(mockService.Object);
+            mockMapper = new Mock<IMapper>();
+            controller = new BlogsController(mockService.Object, mockMapper.Object);
         }
 
         private Blog blogForTest = new Blog
@@ -45,6 +48,8 @@ namespace BlogSystem.Portal.Tests.Controllers
         {
             mockService.Setup(service => service.GetBlogs())
                 .Returns(GetTestBlogs());
+            mockMapper.Setup(mapper => mapper.Map<BlogResponse>(It.IsAny<Blog>()))
+                .Returns(new BlogResponse());
 
             var result = controller.GetBlogs();
 
@@ -57,6 +62,8 @@ namespace BlogSystem.Portal.Tests.Controllers
         {
             mockService.Setup(service => service.GetBlog(1))
                 .Returns(blogForTest);
+            mockMapper.Setup(mapper => mapper.Map<BlogResponse>(It.IsAny<Blog>()))
+                .Returns(new BlogResponse{ Id = 1});
 
             var result = controller.GetBlog(1);
 
@@ -119,6 +126,8 @@ namespace BlogSystem.Portal.Tests.Controllers
         {
             mockService.Setup(service => service.DeleteBlog(1))
                 .Returns(blogForTest);
+            mockMapper.Setup(mapper => mapper.Map<BlogResponse>(It.IsAny<Blog>()))
+                .Returns(new BlogResponse{Id = 1});
 
             var result = controller.DeleteBlog(1);
 
