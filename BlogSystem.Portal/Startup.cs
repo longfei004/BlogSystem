@@ -1,6 +1,7 @@
 using AutoMapper;
 using BlogSystem.Business.Implements;
 using BlogSystem.Business.Interface;
+using BlogSystem.Business.AutoMapping;
 using BlogSystem.DataAccess.DataContext;
 using BlogSystem.DataAccess.Entities;
 using BlogSystem.DataAccess.Repository;
@@ -43,7 +44,7 @@ namespace BlogSystem.Portal
 
             services.AddSwaggerDocument();
 
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(c=>c.AddProfile<BlogEntityMapper>(), typeof(Startup));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

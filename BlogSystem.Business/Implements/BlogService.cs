@@ -3,27 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using BlogSystem.DataAccess.Entities;
 using BlogSystem.Business.Domain;
-using BlogSystem.Business.Extensions;
 using BlogSystem.Business.Exceptions;
 using BlogSystem.Business.Interface;
 using BlogSystem.DataAccess.Repository;
+using AutoMapper;
 
 namespace BlogSystem.Business.Implements
 {
     public class BlogService : IBlogService
     {
         private readonly IRepository<BlogEntity> _blogRepository;
+        private readonly IMapper _mapper;
 
-        public BlogService(IRepository<BlogEntity> blogRepository)
+        public BlogService(IRepository<BlogEntity> blogRepository, IMapper mapper)
         {
             _blogRepository = blogRepository;
+            _mapper = mapper;
         }
 
         public List<Blog> GetBlogs()
         {
             List<BlogEntity> _blogs = _blogRepository.GetAll().OrderByDescending(b => b.Id).ToList();
 
-            return _blogs.Select(blogEntity => blogEntity.ToBlog()).ToList();
+            return _blogs.Select(blogEntity => _mapper.Map<Blog>(blogEntity)).ToList();
         }
 
         public Blog GetBlog(long id)
@@ -31,20 +33,20 @@ namespace BlogSystem.Business.Implements
             BlogEntity _blog = _blogRepository.Get(b => id == b.Id);
             if (_blog == null)
                 throw new NoSuchBlogException();
-            return _blog.ToBlog();
+            return _mapper.Map<Blog>(_blog);
         }
 
         public Blog CreateBlog(Blog blog)
         {
-            BlogEntity createdBlog = _blogRepository.Add(blog.ToBlogEntity());
+            BlogEntity createdBlog = _blogRepository.Add(_mapper.Map<BlogEntity>(blog));
             _blogRepository.SaveChanges();
 
-            return createdBlog.ToBlog();
+            return _mapper.Map<Blog>(createdBlog);
         }
 
         public void ModifyBlog(Blog blog)
         {
-            _blogRepository.Update(blog.ToBlogEntity());
+            _blogRepository.Update(_mapper.Map<BlogEntity>(blog));
 
             try
             {
@@ -52,7 +54,7 @@ namespace BlogSystem.Business.Implements
             }
             catch (Exception)
             {
-                if (!_blogRepository.IsExists(blog.ToBlogEntity()))
+                if (!_blogRepository.IsExists(_mapper.Map<BlogEntity>(blog)))
                     throw new NoSuchBlogException();
                 else
                     throw;
@@ -68,7 +70,7 @@ namespace BlogSystem.Business.Implements
             _blogRepository.Delete(blogEntity);
             _blogRepository.SaveChanges();
 
-            return blogEntity.ToBlog();
+            return _mapper.Map<Blog>(blogEntity);
         }
     }
 }
