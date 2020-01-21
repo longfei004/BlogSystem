@@ -34,7 +34,7 @@ namespace BlogSystem.Portal
                 opt.UseSqlite(Configuration
                     .GetConnectionString("BlogContext"), b => b.MigrationsAssembly("BlogSystem.Portal")));
 
-            services.AddTransient<IRepository<BlogEntity>, BlogRepository<BlogEntity>>();
+            services.AddScoped<IRepository<BlogEntity>, BlogRepository<BlogEntity>>();
 
             services.AddTransient<IBlogService, BlogService>();
 

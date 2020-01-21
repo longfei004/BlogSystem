@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogSystem.Portal.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20200116012445_InitialCreate")]
+    [Migration("20200121025911_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
